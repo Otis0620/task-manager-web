@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  task-manager-web
+
+  SAM Template for task-manager-web
+
+Globals:
+  Function:
+    CodeUri: src/
+    Runtime: nodejs12.x
+    Timeout: 3
+
+Resources:
+  TaskBoardsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: task-boards/app.lambdaHandler
+      Events:
+        TaskBoards:
+          Type: Api
+          Properties:
+            Path: /task-boards
+            Method: get
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TaskBoardsTable
+      
+
+  TaskBoardsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: board_id
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: board_id
+          KeyType: HASH
+
+Outputs:
+  TaskBoardsFunction:
+    Description: "Task Boards Lambda Function ARN"
+    Value: !GetAtt TaskBoardsFunction.Arn
+
+  TaskBoardsTable:
+    Description: "Task Boards Table ARN"
+    Value: !GetAtt TaskBoardsTable.Arn

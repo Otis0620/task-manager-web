@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "task-manager-web"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-apxrj8mbzgb7"
+s3_prefix = "task-manager-web"
+region = "us-west-2"
+profile = "personal"
+capabilities = "CAPABILITY_IAM"
